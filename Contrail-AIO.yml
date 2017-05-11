@@ -1,0 +1,170 @@
+---
+
+- name: delete ssh key info
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: delete ssh key info
+    copy: src=/dev/null dest=/root/.ssh/known_hosts
+
+- name: Setup OS for Contrail
+  hosts: controller1
+  vars:
+    ansible_connection: ssh 
+    ansible_ssh_user: contrail
+    ansible_ssh_pass: contrail123
+    ansible_sudo_pass: contrail123
+  become: true
+  become_user: root
+  become_method: sudo
+  tasks:
+  
+  - name: Apt update
+    apt: 
+      update_cache: yes
+
+#  - name: Install Keir stuff
+#    apt:
+     # name: "{{ item }}"
+#      pkg: "{{ item }}"
+#      state: present
+#      update_cache: true
+#      force: yes
+#      become: true
+
+#    with_items:
+#      - curl
+#      - ntp 
+#      - open-vm-tools 
+#      - cpu-checker
+#      - sysstat
+
+  - name: Install extra apps
+    shell: apt-get install -y -f curl ntp open-vm-tools cpu-checker sysstat
+
+
+#  - name: 'Remove apparmor'
+#    apt:
+#      name: apparmor
+#      state: absent
+
+  - name: 'Setup NTP'
+    shell: echo server 192.168.1.1 > /etc/ntp.conf 
+ 
+  - name: Make Contrail dir
+    file:
+      path: /Contrail
+      state: directory
+ 
+  - name: Get PIP
+    get_url: 
+      url: https://bootstrap.pypa.io/get-pip.py
+      dest: /Contrail/get-pip.py
+
+  - name: Install PIP
+    shell: python /Contrail/get-pip.py 
+
+  - name: 'Allow root ssh'
+    lineinfile: 
+      path: /etc/ssh/sshd_config
+      line: 'PermitRootLogin yes'
+      state: present
+
+  - name: Add entires to ETC Hosts
+    lineinfile: 
+      path: /etc/hosts
+      line: "{{ item }}"
+    with_items:
+      - "192.168.1.11        controller1"
+      - "192.168.1.12        controller2"
+      - "192.168.1.13        controller3"
+      - "192.168.1.14        compute1"
+      - "192.168.1.15        compute2"
+      - "192.168.1.10        contrail"
+ 
+  - name: Comment out PermitRootLogin without-password
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      regexp: '^PermitRootLogin without-password$'
+      line: '#PermitRootLogin without-password'
+
+  - name:  Disable UFW
+    ufw: 
+      state: disabled
+
+  - service:
+      name: ssh
+      state: restarted
+
+  - name: sudo root pass
+    lineinfile:
+      path: /etc/sudoers
+      line: contrail ALL=(ALL) NOPASSWD:ALL
+  
+  - name: root pass change
+    command: echo -e "contrail123\contrail123" | sudo -S passwd
+  
+  - name: copy rooter file
+    copy:
+      src: /Builder/Packer/rooter.sh
+      dest: /root/rooter.sh
+
+  - name: run rooter
+    command: sh /root/rooter.sh
+ 
+  - name: Copy Contrail files to VM
+    copy:
+      src: /Builder/Contrail/v3_2_2/contrail-install-packages_3.2.2.0-33~ubuntu-14-04mitaka_all.deb
+      dest: /Contrail/contrail-install-packages_3.2.2.0-33~ubuntu-14-04mitaka_all.deb
+
+  - name: Copy testbed.py file
+    copy:
+      src: /Builder/Contrail/testbed.py
+      dest: /Contrail/testbed.py
+
+  - name: unpack Contrail deb file
+    apt: 
+      deb: /Contrail/contrail-install-packages_3.2.2.0-33~ubuntu-14-04mitaka_all.deb
+
+  - name: setup Contrail 
+    shell: /opt/contrail/contrail_packages/setup.sh
+  
+  - name: copy fabfile
+    shell: cp /Contrail/testbed.py /opt/contrail/utils/fabfile/testbeds/testbed.py
+
+#  - name: upgrade kernel
+#    shell: chdir=/opt/contrail/utils fab upgrade_kernel_all 
+#    async: 1  
+#    poll: 0
+    
+#  - name:  Is the VM back up yet?
+#    wait_for: 
+#      host= "{{ inventory_hostname }}"
+#      port =22
+#      delay= 15
+#      timeout= 60
+#      delegate_to= localhost
+
+#  - name: Is the VM back up yet?
+#    local_action: wait_for host=controller1 port=22 state=started delay=10 timeout=360
+ 
+  - name: Install Contrail
+    shell: chdir=/opt/contrail/utils fab install_contrail
+    async: 300 
+    poll: 15 
+    ignore_errors: true
+ 
+#  - name: Is the VM back yet?
+#    wait_for:      
+#      host: controller1 
+#      port: 22
+#      state: started
+#      delay: 300
+#      timeout: 600
+#    delegate_to: localhost
+
+  - name: Setup Contrail
+    shell: chdir=/opt/contrail/utils fab setup_all
+    async: 840
+    poll: 10
+    ignore_errors: true
