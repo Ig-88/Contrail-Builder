@@ -1,0 +1,65 @@
+{
+  "builders": [{
+    "vm_name": "Contrail-AIO",
+    "type": "vmware-iso",
+    "guest_os_type": "ubuntu-64",
+    "disk_size": "174080",
+    "disk_type_id": "thin",
+    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso",
+    "iso_checksum": "dd54dc8cfc2a655053d19813c2f9aa9f",
+        "iso_checksum_type": "md5",
+
+        "ssh_username": "contrail",
+        "ssh_password": "contrail123",
+        "ssh_wait_timeout": "20m",
+                "floppy_files": [
+                "AIO-preseed.cfg"
+    ],
+
+    "boot_command" : [
+      "<esc><esc><enter><wait>",
+      "/install/vmlinuz noapic ",
+      "preseed/file=/floppy/AIO-preseed.cfg ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "hostname={{ .Name }} ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
+      "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "initrd=/install/initrd.gz -- <enter>"
+    ],
+   "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'contrail123'|sudo -S sh 'shutdown.sh'",
+        "remote_type": "esx5",
+        "remote_host": "10.180.21.38",
+        "remote_datastore": "S-INF-ESXi8-local",
+        "output_directory": "/Contrail",
+        "remote_username": "root",
+        "remote_password": "Am3rL@b",
+        "keep_registered": true,
+        "vmx_data": {
+         "ethernet0.present": "TRUE",
+         "ethernet0.networkName": "Contrail-EX",
+         "ethernet0.virtualDev": "vmxnet3",
+         "ethernet1.present": "TRUE",
+         "ethernet1.networkName": "Contrail-INT",
+         "ethernet1.virtualDev": "vmxnet3",
+         "memsize": "16384",
+         "numvcpus": "6",
+         "cpuid.coresPerSocket": "2",
+         "vhv.enable": "TRUE"
+      }
+  }],
+  "provisioners": [
+        {
+        "type": "ansible",
+        "playbook_file": "/Builder/Packer/Contrail-AIO.yml",
+        "extra_arguments": [
+        "-i",
+        "/etc/ansible/hosts"
+    ]
+ }, 
+     {
+       "type": "ansible",
+       "playbook_file": "/Builder/Packer/Contrail-post.yml"
+      }
+  ]
+}
