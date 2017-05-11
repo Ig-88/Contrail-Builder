@@ -17,7 +17,7 @@ What YOU do:
 4.  Provide the build VM (only) an IP address/Subnet Mask/Gateway.  NTP and DNS are provided
 5.  
 
-What IT does
+What IT does:
 1.  Creates an AIO Contrail VM
   A.  Downloads the Ubuntu ISO
   B.  Builds the host VM with Packer
