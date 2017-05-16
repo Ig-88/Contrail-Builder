@@ -4,8 +4,8 @@ In order to make this work, some information about your environment needs to be 
 
 Required
 1.  Edit the following Contrail-AIO.json
-  a.  line 12: ssh_username
-  b.  line 13: ssh_password
+  a.  line 12: ssh_username (ESXi server)
+  b.  line 13: ssh_password (ESXi server)
   c.  line 32: remote_host (ESXi server)
   d.  line 33: remote_datestore (on the ESXi server)
   e.  line 35: remote_username (ESXi user)
