@@ -27,10 +27,12 @@ What IT does:
 4.  Setups up Contrail quickly and easily to provide basic look and feel for Contrail and OpenStack
 
 Caveats and known issues
--Some errors presented during Ansible playbook(s)
--Install time can vary based upon server(s) resources 25 minutes - 1 hour
--package management (apt-get) on the Contrail VM will be broken after install
--exclusive to Ubuntu 14.04.5 LTS and Contrail v3.2.2 and VMware ESXi hypervisor(s)
+- Some errors presented during Ansible playbook(s)
+- Install time can vary based upon server(s) resources 25 minutes - 1 hour
+- package management (apt-get) on the Contrail VM will be broken after install
+- exclusive to Ubuntu 14.04.5 LTS and Contrail v3.2.2 and VMware ESXi hypervisor(s)
+- The "fab contrail_setup" command may not finish completely.  This is discovered when issuing the "contrail-status" command     and show something like this "vRouter is NOT PRESENT" or other failure.
+
 
 
 GUI access
