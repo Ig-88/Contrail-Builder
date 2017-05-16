@@ -1,0 +1,13 @@
+
+
+In order to make this work, some information about your environment needs to be added.  
+
+Required
+1.  Edit the following Contrail-AIO.json
+  a.  line 12: ssh_username
+  b.  line 13: ssh_password
+  c.  line 32: remote_host (ESXi server)
+  d.  line 33: remote_datestore (on the ESXi server)
+  e.  line 35: remote_username (ESXi user)
+  f.  line 36: remote_password (ESXi password)
+  g.  line 40: ethernet0.networkName (vSwitch name on ESXi)
