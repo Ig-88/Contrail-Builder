@@ -43,6 +43,7 @@
          "numvcpus": "6",
          "cpuid.coresPerSocket": "2",
          "vhv.enable": "TRUE"
+         "tools.syncTime = "0"
       }
   }],
   "provisioners": [
