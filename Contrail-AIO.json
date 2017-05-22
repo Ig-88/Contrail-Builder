@@ -9,8 +9,8 @@
     "iso_checksum": "dd54dc8cfc2a655053d19813c2f9aa9f",
         "iso_checksum_type": "md5",
 
-        "ssh_username": "CHANGE_ME",
-        "ssh_password": "CHANGE_ME",
+        "ssh_username": "contrail",
+        "ssh_password": "contrail123",
         "ssh_wait_timeout": "20m",
                 "floppy_files": [
                 "AIO-preseed.cfg"
@@ -42,8 +42,8 @@
          "memsize": "16384",
          "numvcpus": "6",
          "cpuid.coresPerSocket": "2",
-         "vhv.enable": "TRUE"
-         "tools.syncTime = "0"
+         "vhv.enable": "TRUE",
+         "tools.syncTime": "0"
       }
   }],
   "provisioners": [
@@ -54,7 +54,7 @@
         "-i",
         "/etc/ansible/hosts"
     ]
- }, 
+ },
      {
        "type": "ansible",
        "playbook_file": "/Builder/Packer/Contrail-post.yml"
