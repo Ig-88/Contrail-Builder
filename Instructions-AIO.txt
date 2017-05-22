@@ -1,13 +1,51 @@
+Instructions for installing Contrail-Builder and All-In-One VM
+The Contrail-Builder VM acts as a the installer as well as a proxy server for any
+connectivity to/from the Contrail-AIO VM.
+
+Prep
+1.  Obtain a routable/networked IP address (RFC1918) that can connect to the Internet to
+    download updates, packages and applications.  This IP is for the Contrail-Builder VM
+    and gets assigned to eth0/vnic1.
+    **Note eth1/vnic2 is statically assigned for the build and setup in the
+    next step.
+2.  Create a new port-group on the ESXi server.  This port-group should be a
+    non-routed port-group that will only be used to connect the Builder and
+    Contrail VMs to each other.
 
 
-In order to make this work, some information about your environment needs to be added.  
 
-Required
-1.  Edit the following Contrail-AIO.json
-  a.  line 12: ssh_username (ESXi server)
-  b.  line 13: ssh_password (ESXi server)
-  c.  line 32: remote_host (ESXi server)
-  d.  line 33: remote_datestore (on the ESXi server)
-  e.  line 35: remote_username (ESXi user)
-  f.  line 36: remote_password (ESXi password)
-  g.  line 40: ethernet0.networkName (vSwitch name on ESXi)
+Install
+1.  Import the Contrail-Builder ova file
+2.  Power on the VM
+3.  Log into the VM's console with 'root'
+4.  Change the IP address of eth0 (obtained in Prep step 1) in the
+    /etc/network/interfaces file and save:
+
+    iface eth0 inet static
+        address 10.180.21.79          <--CHANGE
+        netmask 255.255.255.0         <--CHANGE
+        network 10.180.21.0           <--CHANGE
+        broadcast 10.180.21.255       <--CHANGE
+        gateway 10.180.21.254         <--CHANGE
+        # dns-* options are implemented by the resolvconf package, if installed
+        dns-nameservers 10.180.21.21 10.180.21.22       <--CHANGE
+        dns-search lab.lab
+5.  Reboot the VM
+6.  You can connect as root via ssh or the console into the Builder VM.
+7.  Edit the following lines in the /Builder/Packer/Contrail-AIO.json file and
+    save:
+      a.  line 32: remote_host (ESXi server)
+      b.  line 33: remote_datestore (on the ESXi server)
+      c.  line 35: remote_username (ESXi user)
+      d.  line 36: remote_password (ESXi password)
+      e.  line 40: ethernet0.networkName (vSwitch name on ESXi)
+8.  Start the build process by running:
+      'packer build /Builder/Packer/Contrail-AIO.json'
+9.  This should start and complete the Packer build process.  Depending on the resources
+    of the ESXi server, it should take 25-30 minutes from start to finish.
+    You will see the output from Packer to cli while the builder runs.
+      a.  builder runs in packer to create the VM itself on the ESXi server
+      b.  Downloads the Ubuntu server ISO and calls a preseed config file to
+          build and configure the OS.
+
+10.

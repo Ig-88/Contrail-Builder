@@ -13,7 +13,8 @@ What YOU do:
 2.  Download and import the "Contrail-Build.ova" into environment
 3.  Provide the builder vm with 2 virtual interfaces
   A.  An interface on your local network with Internet access
-  B.  An interface on a separate, non-routed network available only to the builder and Contrail VM.  (you may have to create a       new port-group on the vSwitch.)
+  B.  An interface on a separate, non-routed network available only to the builder and Contrail VM.  
+      (you may have to create a new port-group on the vSwitch.)
 4.  Provide the build VM (only) an IP address/Subnet Mask/Gateway.  NTP and DNS are provided
 5.  
 
@@ -31,8 +32,10 @@ Caveats and known issues
 - Install time can vary based upon server(s) resources 25 minutes - 1 hour
 - package management (apt-get) on the Contrail VM will be broken after install
 - exclusive to Ubuntu 14.04.5 LTS and Contrail v3.2.2 and VMware ESXi hypervisor(s)
-- The "fab contrail_setup" command may not finish completely.  This is discovered when issuing the "contrail-status" command     and show something like this "vRouter is NOT PRESENT" or other failure.
+- The "fab contrail_setup" command may not finish completely.  This is discovered when issuing the          "contrail-status" command     and show something like this "vRouter is NOT PRESENT" or other failure.
 
+In order to make this work, some information about your environment needs to be
+added/updated in the json config file.
 
 
 GUI access
@@ -45,5 +48,3 @@ root/contrail123
 
 User Credentials - GUI
 admin/contrail123
-
- 
