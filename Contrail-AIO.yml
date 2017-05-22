@@ -69,6 +69,18 @@
       path: /etc/ssh/sshd_config
       line: 'PermitRootLogin yes'
       state: present
+     
+  - name:  'increase ssh session timeout'
+    linefile:
+      path:  /etc/ssh/sshd_config
+      line: 'ClientAliveInterval 600'
+      state: present
+      
+  - name:  'increse ssh session timeout'
+    linefile:
+      path:  /etc/ssh/sshd_config
+      line:  'ClientAliveCountMax 3'
+      state: present
 
   - name: Add entires to ETC Hosts
     lineinfile: 
