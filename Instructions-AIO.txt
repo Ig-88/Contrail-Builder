@@ -8,6 +8,7 @@ Prep
     and gets assigned to eth0/vnic1.
     **Note eth1/vnic2 is statically assigned for the build and setup in the
     next step.
+
 2.  Create a new port-group on the ESXi server.  This port-group should be a
     non-routed port-group that will only be used to connect the Builder and
     Contrail VMs to each other.
@@ -16,8 +17,11 @@ Prep
 
 Install
 1.  Import the Contrail-Builder ova file
+
 2.  Power on the VM
+
 3.  Log into the VM's console with 'root'
+
 4.  Change the IP address of eth0 (obtained in Prep step 1) in the
     /etc/network/interfaces file and save:
 
@@ -30,8 +34,11 @@ Install
         # dns-* options are implemented by the resolvconf package, if installed
         dns-nameservers 10.180.21.21 10.180.21.22       <--CHANGE
         dns-search lab.lab
+
 5.  Reboot the VM
+
 6.  You can connect as root via ssh or the console into the Builder VM.
+
 7.  Edit the following lines in the /Builder/Packer/Contrail-AIO.json file and
     save:
       a.  line 32: remote_host (ESXi server)
@@ -41,11 +48,30 @@ Install
       e.  line 40: ethernet0.networkName (vSwitch name on ESXi)
 8.  Start the build process by running:
       'packer build /Builder/Packer/Contrail-AIO.json'
+
 9.  This should start and complete the Packer build process.  Depending on the resources
     of the ESXi server, it should take 25-30 minutes from start to finish.
     You will see the output from Packer to cli while the builder runs.
       a.  builder runs in packer to create the VM itself on the ESXi server
-      b.  Downloads the Ubuntu server ISO and calls a preseed config file to
+      b.  Downloads the Ubuntu server ISO and calls a pre-seed config file to
           build and configure the OS.
+      c.  Upon successful completion the VM will gracefully shutdown.
 
-10.
+10.  Power up and log into the Contrail-AIO VM.
+11.  As root user, run the command 'contrail-status'.  This will give you insight
+     on all the services associated with contrail, all of which should show active.
+     **NOTE All services typically take ~5 minutes to start.
+     Additionally, if you only see 3-4 services listed, it means the install didn't fully complete.
+     You can manually re-run the installer from inside the VM without worry;
+     'cd /opt/contrail/utils' then run 'fab setup_all'.
+     If 'contrail-status' returns a command not found, you will need to run;
+     'cd /opt/contrail/utils' and the 'fab install_contrail'.  Once that is complete,
+     run 'fab setup_all'
+
+12.  You should now be able to access the Contrail and OpenStack GUIs:
+GUI access
+OpenStack = http://IP_address_YOU_provided_in_Step_4/horizon
+Example http://10.10.10.10./horizon
+
+Contrail = http://IP_address_YOU_provided_in_Step_4:8143
+Example https://10.10.10.10:8143

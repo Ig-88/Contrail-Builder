@@ -16,7 +16,6 @@ What YOU do:
   B.  An interface on a separate, non-routed network available only to the builder and Contrail VM.  
       (you may have to create a new port-group on the vSwitch.)
 4.  Provide the build VM (only) an IP address/Subnet Mask/Gateway.  NTP and DNS are provided
-5.  
 
 What IT does:
 1.  Creates an AIO Contrail VM
