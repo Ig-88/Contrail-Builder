@@ -16,6 +16,12 @@ Prep
 
 
 Install
+1.  Enable the "Guest IP Hack" on the ESXi server by connecting via SSH and running
+    this command from the cli;
+    "esxcli system settings advanced set -o /Net/GuestIPHack -i 1"
+    More information is avabile here:
+    https://www.packer.io/docs/builders/vmware-iso.html
+
 1.  Import the Contrail-Builder ova file
 
 2.  Power on the VM

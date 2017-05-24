@@ -1,12 +1,21 @@
 # Contrail-Builder
-Scripting and tools to automatically install a Contrail All-In-One VM on an ESXi server
+Scripting and tools to automatically install a Contrail All-In-One VM on an ESXi
+server.
 
-This is a packaged tool to help simply install a Contrail AIO(All-In-One VM
+This is a packaged tool to help simply install a Contrail AIO(All-In-One VM.
+It basically proxies the contrail install through the Contrai-Builder VM.  This
+allows for less customization (and failure) and more automation (and success).
+If you want more customization and/or a more permanent option, you may be
+better suited manually installing.  
 
-Tools used:
+http://www.juniper.net/us/en/products-services/sdn/contrail/contrail-networking/
+
+Tools used on Contrail-Builder:
 Ansible
 Packer
-
+dnsmasq
+NTP server
+IPtables
 
 What YOU do:
 1.  Provide an ESXi server or vSphere environment version 5 or above
@@ -32,6 +41,7 @@ Caveats and known issues
 - package management (apt-get) on the Contrail VM will be broken after install
 - exclusive to Ubuntu 14.04.5 LTS and Contrail v3.2.2 and VMware ESXi hypervisor(s)
 - The "fab contrail_setup" command may not finish completely.  This is discovered when issuing the          "contrail-status" command     and show something like this "vRouter is NOT PRESENT" or other failure.
+- Packer does support vCenter/vSphere environments
 
 In order to make this work, some information about your environment needs to be
 added/updated in the json config file.
