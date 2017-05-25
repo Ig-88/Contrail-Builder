@@ -69,7 +69,7 @@ to your appropriate information.  Edit the following lines in the
       3.  Runs Ansible plays from a playbook to setup OpenStack and Contrail
       4.  Upon successful completion the VM will gracefully shutdown.
 
-11.  Power up and log into the Contrail-AIO VM.
+11.  Power up and log into the Contrail-AIO VM console or ssh.
 12.  As `root` user, run the command `contrail-status`.  This will give you insight
      on all the services associated with contrail, all of which should show active.
 
@@ -87,10 +87,10 @@ to your appropriate information.  Edit the following lines in the
 13.  You should now be able to access the Contrail and OpenStack GUIs:
 
 GUI access
-* OpenStack = http://IP_address_YOU_provided_in_Step_4/horizon
+* OpenStack = http://IP_address_YOU_provided_in_Step_5/horizon
 * Example http://10.10.10.10./horizon
 
-* Contrail = http://IP_address_YOU_provided_in_Step_4:8143
+* Contrail = https://IP_address_YOU_provided_in_Step_5:8143
 * Example https://10.10.10.10:8143
 
 User Crendentials - CLI  username/password
