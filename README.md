@@ -20,7 +20,8 @@ better suited manually installing.
 http://www.juniper.net/us/en/products-services/sdn/contrail/contrail-networking/
 
 Tools used on Contrail-Builder:
-- Ansible Packer
+- Ansible
+- Packer
 - dnsmasq
 - NTP server
 - IPtables
@@ -54,10 +55,14 @@ discovered when issuing the `contrail-status` command and show something like
 "*vRouter is NOT PRESENT*" or other failure.
 - Packer does support vCenter/vSphere environments
 - The builder VM will build 1 Contrail-AIO.
-- The build manipulates IPtables on the Contrail-Builder VM via the `Contrail-post`
-ansible playbook.  
+- If the initial build fails to install Contrail correctly **BUT** the packer build says that it completes and powered down the VM you can do 1 of 2 things:
 
-In order to make this work, some information about your environment needs to be added/updated in the json (Contrail-AIO.json) config file.  
+  * manually complete the install
+  * Reboot VM and rerun the Packer script.
+    * Rebooting is necessary because the build manipulates IPtables on the Contrail-Builder VM via the `Contrail-post` ansible playbook to complete the install.  Rebooting will remove the IPtables NAT entries that prevent the installation of the necessary packages.
+         
+
+- In order to make this work, some information about your environment needs to be added/updated in the json config file (Contrail-AIO.json).  
 
 
 * OpenStack = http://IP_address_YOU_provided_in_Step_4/horizon  
@@ -65,10 +70,3 @@ IE http://10.10.10.10./horizon
 
 * Contrail = http://IP_address_YOU_provided_in_Step_4:8143      
 IE https://10.10.10.10:8143
-
-User Crendentials - CLI  username/password
-* contrail/contrail123
-* root/contrail123
-
-User Credentials - GUI
-* admin/contrail123

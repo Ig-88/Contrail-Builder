@@ -83,3 +83,10 @@ Example http://10.10.10.10./horizon
 
 Contrail = http://IP_address_YOU_provided_in_Step_4:8143
 Example https://10.10.10.10:8143
+
+User Crendentials - CLI  username/password
+* contrail/contrail123
+* root/contrail123
+
+User Credentials - GUI
+* admin/contrail123
