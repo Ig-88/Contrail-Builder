@@ -1,11 +1,4 @@
-Copyright 2017 Juniper Networks, Inc.  All rights reserved.                   
-Licensed under the Juniper Networks Script Software License (the "License").  
-You may not use this script file except in compliance with the License,       
-which is located at                                                             http://www.juniper.net/support/legal/scriptlicense/                           
-Unless required by applicable law or otherwise agree to in writing by         
-the parties, software distributed under the License is distributed on        
-an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either        
-express or implied.                                           
+###### Copyright 2017 Juniper Networks, Inc.  All rights reserved.                   Licensed under the Juniper Networks Script Software License (the "License").  You may not use this script file except in compliance with the License, which is located at                                                   http://www.juniper.net/support/legal/scriptlicense/             Unless required by applicable law or otherwise agree to in writing by the parties, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.                                           
 
 # Contrail-Builder
 Scripting and tools to automatically install a Contrail All-In-One (Contrail-AIO)
@@ -15,7 +8,7 @@ This is a packaged tool to help simplify install a Contrail-AIO VM.
 It basically proxies the contrail install through the Contrai-Builder VM.  This
 allows for less customization (and failure) and more automation (and success).
 If you want more customization and/or a more permanent option, you may be
-better suited manually installing.  
+better suited manually installing.  Further information can be found here:  
 
 http://www.juniper.net/us/en/products-services/sdn/contrail/contrail-networking/
 
