@@ -1,4 +1,4 @@
-# Contrail-Builder
+#### Contrail-Builder
 Scripting and tools to automatically install a Contrail All-In-One VM on an ESXi
 server.
 
@@ -17,7 +17,7 @@ dnsmasq
 NTP server
 IPtables
 
-What YOU do:
+What # YOU do:
 1.  Provide an ESXi server or vSphere environment version 5 or above
 2.  Download and import the "Contrail-Build.ova" into environment
 3.  Provide the builder vm with 2 virtual interfaces
