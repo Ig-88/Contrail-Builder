@@ -45,7 +45,9 @@ Install
 
 6.  You can connect as root via ssh or the console into the Builder VM.
 
-7.  Edit the following lines in the /Builder/Packer/Contrail-AIO.json file and
+7.  When editing this file, search for the string **CHANGE_ME** and change them
+to your appropriate information.  Edit the following lines in the
+/Builder/Packer/Contrail-AIO.json file and
     save:
       a.  line 32: remote_host (ESXi server)
       b.  line 33: remote_datestore (on the ESXi server)
