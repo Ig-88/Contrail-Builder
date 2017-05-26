@@ -34,25 +34,25 @@ What **IT** does:
   B.  Builds the host VM with Packer
   C.  Installs and configures OpenStack and Contrail with Ansible
 2.  Provides an NTP server and NAT forwarding/routing to the Contrail VM with IPtables
-3.  Provides GUI access to Contrail and OpenStack THROUGH the Contrail-Builder VM with IPtables
+3.  Provides GUI access to Contrail and OpenStack THROUGH the Contrail-Builder VM with IPtables.  As such the Contrail-Builder vm must be powered on for the Contrail-AIO vm to work.  
 4.  Setups up Contrail quickly and easily to provide basic look and feel for Contrail and OpenStack
 
 #### Caveats and known issues
 - The process and build isn't perfect
-- Some errors presented during Ansible playbook(s)
-- Install time can vary based upon server(s) resources 30 minutes - 1 hour
+- Some erroneous errors are presented during Ansible playbook(s)
+- Install time can vary based upon server(s) resources and internet speed from 30 minutes - 1 hour
 - package management (apt-get) on the Contrail VM will be broken after install
 - exclusive to Ubuntu 14.04.5 LTS and Contrail v3.2.2 and VMware ESXi hypervisor(s)
 - The `fab contrail_setup` command may not finish completely.  This is
 discovered when issuing the `contrail-status` command and show something like
-"*vRouter is NOT PRESENT*" or other failure.
+`vRouter is NOT PRESENT` or other failure.
 - Packer does support vCenter or vSphere environments
 - The builder VM will build 1 Contrail-AIO.
 - If the initial build fails to install Contrail correctly **BUT** the packer build says that it completes and powered down the VM you can do 1 of 2 things:
 
   * manually complete the install
-  * Reboot VM and rerun the Packer script.
-    * Rebooting is necessary because the build manipulates IPtables on the Contrail-Builder VM via the `Contrail-post` ansible playbook to complete the install.  Rebooting will remove the IPtables NAT entries that prevent the installation of the necessary packages.
+  * reboot VM and rerun the Packer script.
+    * rebooting is necessary because the build manipulates IPtables on the Contrail-Builder VM via the `Contrail-post` ansible playbook to complete the install.  Rebooting will remove the IPtables NAT entries that prevent the installation of the necessary packages.
 
 
 - In order to make this work, some information about your environment needs to be added/updated in the json config file (Contrail-AIO.json).  
