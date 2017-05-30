@@ -23,11 +23,42 @@ Prep
     More information is available here:
     https://www.packer.io/docs/builders/vmware-iso.html
 
-2.  Import the Contrail-Builder.ova file
+2.  Allow VNC through the ESXi firewall:
 
-3.  Power on the VM
+  1. `chmod 644 /etc/vmware/firewall/service.xml`
 
-4.  Log into the VM's console with `root` credentials list below.
+  2. `chmod +t /etc/vmware/firewall/service.xml`
+
+  3. Then append the range of ports you want open to the end of the file:
+>
+```
+ <service id="1000">
+   <id>packer-vnc</id>
+   <rule id="0000">
+     <direction>inbound</direction>
+     <protocol>tcp</protocol>
+     <porttype>dst</porttype>
+     <port>
+       <begin>5900</begin>
+       <end>6000</end>
+     </port>
+    </rule>
+    <enabled>true</enabled>
+    <required>true</required>
+  </service>
+```
+
+    4. Restore the Firewall permissions:
+```
+            chmod 444 /etc/vmware/firewall/service.xml
+            esxcli network firewall refresh   
+```
+
+3.  Import the Contrail-Builder.ova file
+
+4.  Power on the VM
+
+5.  Log into the VM's console with `root` credentials list below.
 
 5.  Change the IP address of `eth0` (obtained in Prep step 1) in the
     `/etc/network/interfaces` file and save:
@@ -57,7 +88,10 @@ to your appropriate information.  Edit the following lines in the
       5.  `line 40: ethernet0.networkName` (vSwitch name on ESXi)
 
 9.    Start the build process by running:
-      `packer build /Builder/Packer/Contrail-AIO.json`
+
+      `cd /Builder/Packer`
+
+      `packer build Contrail-AIO.json`
 
 10.  This should start and complete the automatic Packer build process.  Depending
       on the resources of the ESXi server, it should take 25-45 minutes from
