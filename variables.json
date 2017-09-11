@@ -1,7 +1,7 @@
 {
-       "remote_host": "10.180.21.32",
+       "remote_host": "xxx.xxx.xxx.xxx",
        "remote_datastore": "datastore1",
        "remote_username": "root",
-       "remote_password": "Am3rL@b",
-       "ethernet0.networkName": "Contrail-External"
+       "remote_password": "PASSWORD",
+       "ethernet0.networkName": "vPORT-GROUP"
 }
