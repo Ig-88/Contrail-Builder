@@ -1,64 +1,91 @@
 {
   "builders": [{
-    "vm_name": "Contrail-AIO",
+    "vm_name": "contrail-AIO",
     "type": "vmware-iso",
     "guest_os_type": "ubuntu-64",
     "disk_size": "174080",
     "disk_type_id": "thin",
-    "iso_url": "http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso",
+    "iso_url": 
+"http://releases.ubuntu.com/14.04/ubuntu-14.04.5-server-amd64.iso",
     "iso_checksum": "dd54dc8cfc2a655053d19813c2f9aa9f",
-        "iso_checksum_type": "md5",
-
-        "ssh_username": "contrail",
-        "ssh_password": "contrail123",
-        "ssh_wait_timeout": "20m",
-                "floppy_files": [
-                "AIO-preseed.cfg"
+    "iso_checksum_type": "md5",
+    "ssh_username": "juniper",
+    "ssh_password": "juniper123",
+    "ssh_wait_timeout": "1000s",
+    "floppy_files": [
+      "/Builder/Packer/ks.cfg"
     ],
-
+  
     "boot_command" : [
       "<esc><esc><enter><wait>",
       "/install/vmlinuz noapic ",
-      "preseed/file=/floppy/AIO-preseed.cfg ",
+      "ks=floppy:/ks.cfg ",
       "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
-      "hostname={{ .Name }} ",
+      "hostname=contrail-aio netcfg/choose_interface=eth0 ",
       "fb=false debconf/frontend=noninteractive ",
       "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA ",
       "keyboard-configuration/variant=USA console-setup/ask_detect=false ",
-      "initrd=/install/initrd.gz -- <enter>"
+      "initrd=/install/initrd.gz -- <enter> "
     ],
-   "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'contrail123'|sudo -S sh 'shutdown.sh'",
-        "remote_type": "esx5",
-        "remote_host": "CHANGE_ME",
-        "remote_datastore": "CHANGE_ME",
-        "output_directory": "/Contrail",
-        "remote_username": "CHANGE_ME",
-        "remote_password": "CHANGE_ME",
-        "keep_registered": "true",
-        "vnc_disable_password": "true",
-        "vmx_data": {
-         "ethernet0.present": "TRUE",
-         "ethernet0.networkName": "CHANGE_ME",
-         "ethernet0.virtualDev": "vmxnet3",
-         "memsize": "16384",
-         "numvcpus": "6",
-         "cpuid.coresPerSocket": "2",
-         "vhv.enable": "TRUE",
-         "tools.syncTime": "0"
+    "shutdown_command": "echo 'shutdown -P now' > shutdown.sh; echo 'juniper123'|sudo -S sh 'shutdown.sh'",
+    "remote_type": "esx5",
+    "remote_host": "{{user `remote_host`}}",
+    "remote_datastore": "{{user `remote_datastore`}}",
+    "output_directory": "/Contrail",
+    "remote_username": "{{user `remote_username`}}",
+    "remote_password": "{{user `remote_password`}}",
+    "keep_registered": "TRUE",
+    "vnc_disable_password": "TRUE",
+    "vmx_data": {
+      "ethernet0.present": "TRUE",
+      "ethernet0.networkName": "{{user `ethernet0.networkName`}}",
+      "ethernet0.virtualDev": "vmxnet3",
+      "memsize": "16384",
+      "numvcpus": "6",
+      "cpuid.coresPerSocket": "2",
+      "vhv.enable": "TRUE",
+      "tools.syncTime": "0"
       }
   }],
   "provisioners": [
         {
-        "type": "ansible",
-        "playbook_file": "/Builder/Packer/Contrail-AIO.yml",
-        "extra_arguments": [
-        "-i",
-        "/etc/ansible/hosts"
-    ]
- },
-     {
-       "type": "ansible",
-       "playbook_file": "/Builder/Packer/Contrail-post.yml"
+         "type": "file",
+         "source": "/PackItUp.tgz",
+         "destination": "/home/juniper/PackItUp.tgz" 
+        },
+        {
+        "type": "shell",
+        "execute_command": "echo 'juniper123' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+        "inline": [
+          "echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers",
+          "sleep 30",
+          "sudo mv /home/juniper/PackItUp.tgz /",
+          "sudo tar -zxf /PackItUp.tgz --directory /",
+          "sudo mv -f /PackItUp/hosts /etc/hosts",
+          "sudo apt-get update -y",
+          "sudo apt-get install -y ntp sshpass openssh-server git lynis python python-pip open-vm-tools",
+          "sudo mv -f /PackItUp/sshd_config /etc/ssh/sshd_config",
+          "sudo service ssh restart",
+          "echo 'root:juniper123' | sudo chpasswd",
+          "sudo pip install --upgrade pip",
+          "sudo pip install ansible==2.2.3.0",
+          "sudo pip install pyopenssl",
+          "sudo echo tmpfs /run/shm tmpfs defaults,noexec,nosuid 0 0 >> /etc/fstab",
+          "sudo echo server pool.ntp.org > /etc/ntp.con",
+          "sudo echo server 192.168.1.1 >> /etc/ntp.conf",
+          "sudo mkdir /Contrail",
+          "sudo mv /PackItUp/v3_2_4 /Contrail",
+          "sudo ufw disable",
+          "sudo dpkg -i /Contrail/v3_2_4/contrail-install-packages_3.2.4.0-46-ubuntu-14-04mitaka_all.deb",
+          "sudo /opt/contrail/contrail_packages/setup.sh",
+          "sudo mv /PackItUp/testbed.py /opt/contrail/utils/fabfile/testbeds/testbed.py",
+          "(cd /opt/contrail/utils && sudo fab install_contrail)"
+        ]
+   },
+      {
+        "type": "shell",
+        "inline": "(cd /opt/contrail/utils && sudo fab setup_all)",
+        "pause_before": "120s"
       }
-  ]
+    ]
 }
