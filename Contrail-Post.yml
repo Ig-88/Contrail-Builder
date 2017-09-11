@@ -1,0 +1,16 @@
+---  
+
+- name: Post install iptables setup
+#  hosts: localhost
+#  tasks:
+#  - name: setup iptables for OpenStack port forwarding
+#    shell: iptables -t nat -A PREROUTING -p tcp --dport 80 -j DNAT --to-destination 192.168.1.11:80
+
+#  - name: setup iptables for OpenStack port forwarding return traffic
+#    shell: iptables -t nat -A POSTROUTING -p tcp -d 192.168.1.11 --dport 80 -j SNAT --to-source {{ ansible_eth0.ipv4.address }}
+
+#  - name: setup iptables for Contrail port forwarding
+#    shell: iptables -t nat -A PREROUTING -p tcp --dport 8143 -j DNAT --to-destination 192.168.1.11:8143
+
+#  - name: setup iptables for Contrail port forwarding
+#    shell: iptables -t nat -A POSTROUTING -p tcp -d 192.168.1.11 --dport 8143 -j SNAT --to-source {{ ansible_eth0.ipv4.address }}
