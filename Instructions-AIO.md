@@ -90,9 +90,9 @@ to your appropriate information.  Edit the following lines in the
 
 10.    Start the build process by running:
 
-      `cd /Builder/Packer`
+      cd /Builder/Packer
 
-      `packer build -var-file=variables.json Contrail-AIO.json`
+      packer build -var-file=variables.json Contrail-AIO.json
 
 11.  This should start and complete the automatic Packer build process.  Depending
       on the resources of the ESXi server, it should take 60 minutes from
