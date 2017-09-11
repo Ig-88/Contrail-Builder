@@ -95,7 +95,7 @@ to your appropriate information.  Edit the following lines in the
       packer build -var-file=variables.json Contrail-AIO.json
 
 11.  This should start and complete the automatic Packer build process.  Depending
-      on the resources of the ESXi server, it should take 60 minutes from
+      on the resources of the ESXi server, it should take 60-90 minutes from
       start to finish.  You will see the output from Packer to builder cli while the
       builder scripts run.  At a high level it does the following:
       1.  Contrail-Builder runs in packer to create the VM itself on the ESXi server
