@@ -52,7 +52,7 @@ discovered when issuing the `contrail-status` command and show something like
 
   * manually complete the install
   * reboot VM and rerun the Packer script.
-    * rebooting is necessary because the build manipulates IPtables on the Contrail-Builder VM via the `Contrail-post` ansible playbook to complete the install.  Rebooting will remove the IPtables NAT entries that prevent the installation of the necessary packages.
+    * rebooting is necessary because the build manipulates IPtables on the Contrail-Builder VM via the `Contrail-Post` ansible playbook to complete the install.  Rebooting will remove the IPtables NAT entries that prevent the installation of the necessary packages.
 
 
 - In order to make this work, some information about your environment needs to be added/updated in the json config file (variables.json).  
