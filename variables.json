@@ -1,13 +1,7 @@
-##FOR FUTURE USE
-
-
 {
-    "variables": {
-       # "ssh_name": "contrail",
-       #"ssh_pass": "contrail123",
-       #"hostname": "contrail-test"
-       "esxi_host": "CHANGE_ME",
-       "esxi_datastore": "CHANGE_ME",
-       "esxi_username": "CHANGE_ME",
-       "esxi_password": "CHANGE_ME"
+       "remote_host": "10.180.21.32",
+       "remote_datastore": "datastore1",
+       "remote_username": "root",
+       "remote_password": "Am3rL@b",
+       "ethernet0.networkName": "Contrail-External"
 }
