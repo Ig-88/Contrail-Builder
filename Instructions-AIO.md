@@ -80,22 +80,22 @@ esxcli network firewall refresh
 
 9.  When editing this file, search for the string **CHANGE_ME** and change them
 to your appropriate information.  Edit the following lines in the
-`/Builder/Packer/Contrail-AIO.json` file and save:
+`/Builder/Packer/variables.json` file and save:
 
-      1.  `line 32: remote_host` (ESXi server)
-      2.  `line 33: remote_datestore` (on the ESXi server)
-      3.  `line 35: remote_username` (ESXi user)
-      4.  `line 36: remote_password` (ESXi password)
-      5.  `line 40: ethernet0.networkName` (vSwitch name on ESXi)
+      remote_host (ESXi server)
+      remote_datestore (on the ESXi server)
+      remote_username (ESXi user)
+      remote_password (ESXi password)
+      ethernet0.networkName (vSwitch name on ESXi)
 
 10.    Start the build process by running:
 
       `cd /Builder/Packer`
 
-      `packer build Contrail-AIO.json`
+      `packer build -var-file=variables.json Contrail-AIO.json`
 
 11.  This should start and complete the automatic Packer build process.  Depending
-      on the resources of the ESXi server, it should take 25-45 minutes from
+      on the resources of the ESXi server, it should take 60 minutes from
       start to finish.  You will see the output from Packer to builder cli while the
       builder scripts run.  At a high level it does the following:
       1.  Contrail-Builder runs in packer to create the VM itself on the ESXi server
@@ -105,7 +105,7 @@ to your appropriate information.  Edit the following lines in the
       4.  Upon successful completion the VM will gracefully shutdown.
 
 12.  Power up and log into the Contrail-AIO VM console or ssh.
-13.  As `root` user, run the command `contrail-status`.  This will give you insight
+13.  Login and run the command `sudo contrail-status`.  This will give you insight
      on all the services associated with contrail, all of which should show active.
 
      **NOTE** All services typically take ~5 minutes to start/restart.
@@ -129,8 +129,8 @@ GUI access
 * Example https://10.10.10.10:8143
 
 User Crendentials - CLI  username/password
-* contrail/contrail123
-* root/contrail123
+* juniper/juniper123
+* root/juniper123
 
 User Credentials - OpenStack and Contrail GUI
-* admin/contrail123
+* admin/juniper123
